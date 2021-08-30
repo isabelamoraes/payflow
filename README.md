@@ -35,13 +35,13 @@ To clone and run this application, place from your command line:
 # Clone this repository
 $ git clone https://github.com/isabelamoraes/payflow.git payflow
 
-# Go into the repository desired
+# Go into the repository
 $ cd payflow
 
 # Install dependencies
 $ yarn
 
-# Run the mobile application (Android)
+# Run the mobile application
 $ expo start
 
 ```
