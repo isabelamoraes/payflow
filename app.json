@@ -1,0 +1,26 @@
+{
+  "name": "payflow",
+  "displayName": "payflow",
+  "expo": {
+    "name": "payflow",
+    "slug": "payflow",
+    "scheme": "payflow",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "backgroundColor": "#FFFFFF"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "orientation": "portrait"  
+  }
+  
+}
