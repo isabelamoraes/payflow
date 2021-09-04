@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
 import { useRoute } from '@react-navigation/native';
+import { format, addDays } from 'date-fns'
 
 import { Input } from '../../components/Input';
 
@@ -27,7 +28,7 @@ import {
 } from './styles';
 
 interface Params {
-	barCodeScan: string;
+    barCodeScan: string;
 }
 
 export function RegisterBillet({ navigation }: any) {
@@ -35,15 +36,43 @@ export function RegisterBillet({ navigation }: any) {
     const { user } = useAuth();
     const routes = useRoute();
 
-    const {barCodeScan} = routes.params as Params;
+    const { barCodeScan } = routes.params as Params;
 
     const [title, setTitle] = useState('');
-    const [date, setDate] = useState('');
-    const [price, setPrice] = useState('');
+    const [date, setDate] = useState(getDateBarCode());
+    const [price, setPrice] = useState(getPriceBarCode());
     const [barCode, setBarCode] = useState(barCodeScan);
 
-    function formattedDate(date: string){
-        let formatted = date.replace(/^(\d{2})(\d{2})(\d{4}).*/,"$1/$2/$3");
+    function getDateBarCode() {
+
+        if (barCodeScan == '') return '';
+
+        let dateBarCode = barCodeScan.substring(31, 35);
+
+        //documento não possui data de validade
+        if (dateBarCode == '0000') return '';
+
+        //data-base de um boleto: 07/10/1997
+        //Ficou 9 ao invés de 10 pois ao gerar adicionava +1 ao mês
+        let dateBase = new Date(1997, 9, 7);
+
+        let dueDate = format(addDays(dateBase, parseInt(dateBarCode)), 'dd/MM/yyyy');
+
+        return dueDate;
+    }
+
+    function getPriceBarCode(){
+
+        if (barCodeScan == '') return '';
+
+        let valueBarCode = barCodeScan.substring(35);
+        let priceFormatted = Number(valueBarCode) / 100;
+
+        return priceFormatted.toString();
+    }
+
+    function formattedDate(date: string) {
+        let formatted = date.replace(/^(\d{2})(\d{2})(\d{4}).*/, "$1/$2/$3");
         setDate(formatted);
     }
 
@@ -97,7 +126,7 @@ export function RegisterBillet({ navigation }: any) {
         }
     }
 
-    function handleCancel(){
+    function handleCancel() {
         navigation.navigate('Home')
     }
 
@@ -140,8 +169,8 @@ export function RegisterBillet({ navigation }: any) {
                     keyboardType="numeric"
                     placeholder="Vencimento"
                     value={date}
-                    onChangeText={formattedDate}   
-                    maxLength={10}                 
+                    onChangeText={formattedDate}
+                    maxLength={10}
                 />
 
                 <Input
